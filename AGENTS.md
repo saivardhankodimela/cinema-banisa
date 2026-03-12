@@ -1,8 +1,73 @@
 # AGENTS.md - Cinema Banisa
 
-## Overview
+This file contains guidelines for AI agents working on the Cinema Banisa project.
 
-Personal movie/TV tracker built with Next.js 14 (App Router), TypeScript, Tailwind CSS, and Supabase.
+---
+
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| **Framework** | Next.js 14 (App Router) |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS |
+| **Database** | Supabase (PostgreSQL) |
+| **Authentication** | Supabase Auth |
+| **Movie Data** | TMDB API |
+| **Icons** | Lucide React |
+| **State/Fetch** | React hooks + SWR |
+| **Deployment** | Vercel |
+
+---
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
+| `TMDB_API_KEY` | TMDB API key |
+
+---
+
+## Rules for AI Agents
+
+### 1. Git & Commits
+
+- **NEVER** configure git user identity without explicit permission
+- **NEVER** guess or assume user's email
+- **NEVER** commit on behalf of the user
+- If git rejects due to missing identity, inform the user and let them configure it
+- Only prepare changes (stage, show diff) - never push
+
+### 2. Security
+
+- Never expose API keys or secrets in code
+- Always use environment variables for sensitive data
+- Never commit `.env` files or files containing keys
+- Keep `.gitignore` updated with sensitive file patterns
+
+### 3. Code Quality
+
+- Follow TypeScript strict mode
+- Use explicit types - avoid `any`
+- Use the `@/` path alias for imports
+- Group imports: React → External → Internal → Types
+- Use functional components with `'use client'` directive for client-side logic
+
+### 4. Building & Testing
+
+- Always test builds locally before asking user to push
+- Run `npm run build` to check for TypeScript errors
+- Run `npm run lint` to check for linting issues
+- Fix all errors before asking user to deploy
+
+### 5. Communication
+
+- Ask for confirmation before making significant changes
+- Explain what changes will be made before doing them
+- Never make assumptions - ask when unsure
+- Be clear about what the user needs to do (e.g., configure git, push to GitHub)
 
 ---
 
@@ -95,30 +160,20 @@ try {
 
 ```
 src/
-├── app/
-│   ├── (auth)/        # login, signup
-│   ├── (main)/         # dashboard, search, watchlist, history, recommendations, profile
+├── app/           # Next.js App Router pages
+│   ├── (auth)/    # Auth pages (login, signup)
+│   ├── (main)/    # Protected pages (dashboard, search, etc.)
 │   │   ├── movie/[id]/
 │   │   └── tv/[id]/
-│   └── api/            # API routes
-├── components/
-│   ├── ui/            # Button, Input, Rating, Skeleton
-│   ├── cards/          # MovieCard
-│   └── layout/         # Sidebar, MobileNav
-├── hooks/              # useUser.ts
-├── lib/                # supabase.ts, tmdb.ts, utils.ts
-└── types/             # index.ts
+│   └── api/       # API routes
+├── components/    # React components
+│   ├── ui/        # Reusable UI (Button, Input, Rating)
+│   ├── cards/     # Card components
+│   └── layout/    # Layout components
+├── hooks/         # Custom React hooks
+├── lib/           # Utilities (supabase, tmdb, utils)
+└── types/         # TypeScript types
 ```
-
----
-
-## Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
-| `TMDB_API_KEY` | TMDB API key |
 
 ---
 
@@ -150,11 +205,9 @@ Tables: `profiles`, `movies`, `tv_shows`, `user_watch_history`, `user_watchlist`
 
 ---
 
-## Tech Stack
+## Important Notes
 
-- **Frontend**: Next.js 14, React 18, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes
-- **Database**: Supabase (PostgreSQL)
-- **Auth**: Supabase Auth
-- **Movie Data**: TMDB API
-- **Icons**: Lucide React
+- The user is new to frontend development - explain things clearly
+- Keep responses concise and actionable
+- When something breaks, provide step-by-step fixes
+- Always verify the fix works locally before asking user to push
