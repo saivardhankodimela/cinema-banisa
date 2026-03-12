@@ -8,6 +8,16 @@ import { MovieCard } from '@/components/cards/MovieCard';
 import { Movie, TVShow, WatchlistItem } from '@/types';
 import { Loader2, Trash2 } from 'lucide-react';
 
+function getMediaTitle(media: Movie | TVShow | undefined): string {
+  if (!media) return '';
+  return 'title' in media ? media.title : media.name;
+}
+
+function getMediaReleaseDate(media: Movie | TVShow | undefined): string | undefined {
+  if (!media) return undefined;
+  return 'release_date' in media ? media.release_date : media.first_air_date;
+}
+
 export default function WatchlistPage() {
   const { user } = useAuth();
   const [items, setItems] = useState<(WatchlistItem & { mediaData?: Movie | TVShow })[]>([]);
@@ -79,9 +89,9 @@ export default function WatchlistPage() {
               <MovieCard
                 id={item.tmdb_id}
                 mediaType={item.media_type}
-                title={item.mediaData?.title || item.mediaData?.name || ''}
+                title={getMediaTitle(item.mediaData)}
                 posterPath={item.mediaData?.poster_path || null}
-                releaseDate={item.mediaData?.release_date || item.mediaData?.first_air_date}
+                releaseDate={getMediaReleaseDate(item.mediaData)}
                 rating={item.mediaData?.vote_average}
               />
               <button

@@ -5,7 +5,7 @@ const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
 const API_KEY = process.env.TMDB_API_KEY;
 
 export const TMDB = {
-  getImageUrl: (path: string | null, size: 'w500' | 'w780' | 'original' = 'w500') => {
+  getImageUrl: (path: string | null, size: 'w92' | 'w154' | 'w185' | 'w300' | 'w500' | 'w780' | 'w1280' | 'original' = 'w500') => {
     if (!path) return null;
     return `${TMDB_IMAGE_BASE}/${size}${path}`;
   },

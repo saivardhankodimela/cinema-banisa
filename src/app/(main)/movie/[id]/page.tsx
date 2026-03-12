@@ -225,10 +225,11 @@ export default function MovieDetailPage() {
 
   if (!data) return null;
 
-  const title = data.title || data.name || '';
-  const releaseDate = data.release_date || data.first_air_date;
-  const runtime = 'runtime' in data ? data.runtime : (data as TVShow).episode_run_time?.[0];
-  const genres = data.genres || [];
+  const movie = data as Movie;
+  const title = movie.title || '';
+  const releaseDate = movie.release_date || '';
+  const runtime = movie.runtime;
+  const genres = movie.genres || [];
   const director = credits?.crew?.find((c) => c.job === 'Director');
 
   return (
@@ -272,8 +273,8 @@ export default function MovieDetailPage() {
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary">
                 {title}
               </h1>
-              {data.original_title && data.original_title !== title && (
-                <p className="text-text-secondary mt-1">{data.original_title}</p>
+              {movie.original_title && movie.original_title !== title && (
+                <p className="text-text-secondary mt-1">{movie.original_title}</p>
               )}
             </div>
 

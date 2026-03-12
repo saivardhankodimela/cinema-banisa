@@ -10,6 +10,11 @@ import { Rating } from '@/components/ui/Rating';
 import { formatDate, cn } from '@/lib/utils';
 import { Loader2, Trash2, Star } from 'lucide-react';
 
+function getMediaTitle(media: Movie | TVShow | undefined): string {
+  if (!media) return '';
+  return 'title' in media ? media.title : media.name;
+}
+
 export default function HistoryPage() {
   const { user } = useAuth();
   const [history, setHistory] = useState<(UserHistory & { mediaData?: Movie | TVShow })[]>([]);
@@ -108,7 +113,7 @@ export default function HistoryPage() {
                 <MovieCard
                   id={item.tmdb_id}
                   mediaType={item.media_type}
-                  title={item.mediaData?.title || item.mediaData?.name || ''}
+                  title={getMediaTitle(item.mediaData)}
                   posterPath={item.mediaData?.poster_path || null}
                 />
               </div>
@@ -116,7 +121,7 @@ export default function HistoryPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-lg font-medium text-text-primary">
-                      {item.mediaData?.title || item.mediaData?.name}
+                      {getMediaTitle(item.mediaData)}
                     </h3>
                     <p className="text-sm text-text-secondary capitalize">
                       {item.media_type} • Watched {formatDate(item.watched_at)}
