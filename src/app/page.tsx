@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight, Star, Bookmark, Sparkles } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   let session = null;
   

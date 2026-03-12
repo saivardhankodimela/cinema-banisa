@@ -4,8 +4,6 @@ const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || '';
 
-console.log('TMDB: API Key loaded:', API_KEY ? `YES (${API_KEY.substring(0,5)}...)` : 'NO');
-
 if (!API_KEY) {
   console.error('NEXT_PUBLIC_TMDB_API_KEY is not set!');
 }
