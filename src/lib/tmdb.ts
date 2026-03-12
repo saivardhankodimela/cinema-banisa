@@ -2,7 +2,7 @@ import { Movie, TVShow, SearchResult, Credits } from '@/types';
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
-const API_KEY = process.env.TMDB_API_KEY;
+const API_KEY = process.env.TMDB_API_KEY || '';
 
 export const TMDB = {
   getImageUrl: (path: string | null, size: 'w92' | 'w154' | 'w185' | 'w300' | 'w500' | 'w780' | 'w1280' | 'original' = 'w500') => {
