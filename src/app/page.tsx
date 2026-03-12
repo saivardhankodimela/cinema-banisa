@@ -1,12 +1,19 @@
-import { createClient } from '@/lib/supabase';
+import { createServerClientFromCookies } from '@/lib/supabase';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight, Star, Bookmark, Sparkles } from 'lucide-react';
 
 export default async function HomePage() {
-  const supabase = createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  let session = null;
+  
+  try {
+    const supabase = await createServerClientFromCookies();
+    const { data } = await supabase.auth.getSession();
+    session = data?.session;
+  } catch (e) {
+    console.error('Auth check error:', e);
+  }
 
   if (session) {
     redirect('/dashboard');

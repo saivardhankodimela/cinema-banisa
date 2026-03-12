@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useUser';
 import { TMDB } from '@/lib/tmdb';
-import { createClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { MovieCard } from '@/components/cards/MovieCard';
 import { Movie, TVShow, UserHistory } from '@/types';
 import { Rating } from '@/components/ui/Rating';

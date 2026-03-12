@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useUser';
 import { TMDB } from '@/lib/tmdb';
 import { MovieCard } from '@/components/cards/MovieCard';
 import { MovieRowSkeleton } from '@/components/ui/Skeleton';
-import { createClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import Link from 'next/link';
 import { ArrowRight, TrendingUp, Clock, Star } from 'lucide-react';
 import { UserStats, SearchResult } from '@/types';
@@ -18,11 +18,18 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [trendingData] = await Promise.all([
-        TMDB.getTrending('all'),
-      ]);
-      setTrending(trendingData.slice(0, 10));
-      setLoading(false);
+      try {
+        console.log('Fetching trending data...');
+        const [trendingData] = await Promise.all([
+          TMDB.getTrending('all'),
+        ]);
+        console.log('Trending data:', trendingData);
+        setTrending(trendingData.slice(0, 10));
+      } catch (error) {
+        console.error('Failed to fetch trending:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();

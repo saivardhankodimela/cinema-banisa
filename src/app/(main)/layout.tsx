@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase';
+import { createServerClientFromCookies } from '@/lib/supabase';
 import { redirect } from 'next/navigation';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { MobileNav } from '@/components/layout/MobileNav';
@@ -10,8 +10,15 @@ export default async function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  let session = null;
+  
+  try {
+    const supabase = await createServerClientFromCookies();
+    const { data } = await supabase.auth.getSession();
+    session = data?.session;
+  } catch (e) {
+    console.error('Auth check error:', e);
+  }
 
   if (!session) {
     redirect('/login');

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createApiClient } from '@/lib/supabase-api';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -9,15 +9,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'User ID required' }, { status: 400 });
   }
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createApiClient();
 
-  const { data: history } = await supabase
+  const { data: history, error } = await supabase
     .from('user_watch_history')
     .select('*')
     .eq('user_id', userId);
+
+  if (error) {
+    console.error('Failed to fetch history:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 
   if (!history || history.length === 0) {
     return NextResponse.json({

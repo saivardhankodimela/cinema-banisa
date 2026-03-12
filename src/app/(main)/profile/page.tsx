@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth, useUserStats } from '@/hooks/useUser';
-import { createClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { User, Loader2, TrendingUp, Film, Tv, Star } from 'lucide-react';

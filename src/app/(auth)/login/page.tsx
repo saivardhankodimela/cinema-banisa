@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
@@ -31,7 +31,7 @@ export default function LoginPage() {
       setError(error.message);
       setLoading(false);
     } else {
-      router.push('/dashboard');
+      setTimeout(() => router.push('/dashboard'), 100);
     }
   };
 

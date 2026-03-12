@@ -11,7 +11,7 @@ import {
   User,
   LogOut,
 } from 'lucide-react';
-import { createClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { cn } from '@/lib/utils';
 
 const navItems = [

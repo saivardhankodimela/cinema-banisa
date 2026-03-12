@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { TMDB } from '@/lib/tmdb';
 import { MovieCard } from '@/components/cards/MovieCard';
 import { Input } from '@/components/ui/Input';
@@ -17,31 +17,55 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<FilterType>('all');
   const [hasSearched, setHasSearched] = useState(false);
+  const [error, setError] = useState('');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleSearch = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim()) {
       setResults([]);
       setHasSearched(false);
+      setError('');
       return;
     }
 
     setLoading(true);
     setHasSearched(true);
+    setError('');
 
-    const data = await TMDB.search(searchQuery, filter);
-    setResults(data);
-    setLoading(false);
+    try {
+      const data = await TMDB.search(searchQuery, filter);
+      setResults(data);
+    } catch (err) {
+      console.error('Search error:', err);
+      setError('Failed to search. Please try again.');
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
   }, [filter]);
 
-  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    
-    const debounce = setTimeout(() => {
-      handleSearch(value);
+  useEffect(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      handleSearch(query);
     }, 300);
 
-    return () => clearTimeout(debounce);
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [query, filter, handleSearch]);
+
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  const handleFilterChange = (newFilter: FilterType) => {
+    setFilter(newFilter);
   };
 
   return (
@@ -70,7 +94,7 @@ export default function SearchPage() {
 
         <div className="flex gap-2">
           <button
-            onClick={() => { setFilter('all'); handleSearch(query); }}
+            onClick={() => handleFilterChange('all')}
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
               filter === 'all'
@@ -82,7 +106,7 @@ export default function SearchPage() {
             All
           </button>
           <button
-            onClick={() => { setFilter('movie'); handleSearch(query); }}
+            onClick={() => handleFilterChange('movie')}
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
               filter === 'movie'
@@ -94,7 +118,7 @@ export default function SearchPage() {
             Movies
           </button>
           <button
-            onClick={() => { setFilter('tv'); handleSearch(query); }}
+            onClick={() => handleFilterChange('tv')}
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
               filter === 'tv'
@@ -107,6 +131,12 @@ export default function SearchPage() {
           </button>
         </div>
       </div>
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-lg">
+          {error}
+        </div>
+      )}
 
       {loading ? (
         <MovieRowSkeleton />

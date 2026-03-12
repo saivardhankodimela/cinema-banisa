@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { createClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-client';
 import { TMDB } from '@/lib/tmdb';
 import { Button } from '@/components/ui/Button';
 import { Rating } from '@/components/ui/Rating';
